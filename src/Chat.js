@@ -1,5 +1,5 @@
 import "./Chat.css";
-import { Avatar, IconButton, Modal } from "@mui/material";
+import { Avatar, IconButton } from "@mui/material";
 import MoreVertIcon from "@mui/icons-material/MoreVert";
 import SearchIcon from "@mui/icons-material/Search";
 import InsertEmoticonIcon from "@mui/icons-material/InsertEmoticon";
@@ -10,8 +10,6 @@ import { useParams } from "react-router-dom";
 import { useEffect, useState, useRef } from "react";
 import axios from "./axios";
 import { useStateValue } from "./StateProvider";
-import {channel} from './Pusher'
-import Pusher from "pusher-js";
 
 const Chat = () => {
   const { roomId } = useParams();
@@ -26,30 +24,25 @@ const Chat = () => {
 
   const fetchData = async () => {
     const chatData = await axios.get(`/rooms/${roomId}`);
-    console.log("Chat Data");
+
     setRoom(chatData?.data[0]);
     const chatMessages = await axios.get(`/rooms/messages/${roomId}`);
-    console.log(chatMessages.data);
-    console.log("Chat Messages");
+
     setMessages(chatMessages?.data);
   };
 
   useEffect(() => {
     const filteredData = messages.filter((message) =>
       search !== ""
-        ? ((message?.text).toLowerCase()).includes(search.toLowerCase())
+        ? (message?.text).toLowerCase().includes(search.toLowerCase())
         : messages
     );
     setFilteredMessages(filteredData);
   }, [messages, search]);
 
   useEffect(() => {
-    fetchData("chatData");
-      channel.bind("inserted", function (newRoom) {
-      fetchData("chatMessages");
-      console.log(newRoom);
-      messagesView?.current?.scrollIntoView({ behavior: "smooth" });
-    });
+    fetchData();
+    messagesView?.current?.scrollIntoView({ behavior: "smooth" });
   }, [roomId]);
 
   const sendMessage = async () => {
@@ -58,6 +51,7 @@ const Chat = () => {
       text: message,
     });
     setMessage("");
+    fetchData();
   };
 
   return (

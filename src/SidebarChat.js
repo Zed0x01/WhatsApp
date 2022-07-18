@@ -13,8 +13,9 @@ const SidebarChat = ({ room }) => {
     if (validate !== null) {
       await axios
         .delete(`/rooms/${room?._id}`, { data: { email: user?.email } })
-        .then((res) => {
-          console.log(res.data);
+        .then((res) => {})
+        .catch((err) => {
+          console.log(err);
         });
     }
   };

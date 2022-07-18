@@ -40,17 +40,16 @@ const Sidebar = ({ rooms }) => {
   const addNewChat = () => {
     const roomName = prompt("Enter Room Name");
     const roomImage = prompt("Enter Room Image URL ");
-    if(roomImage && roomName !== null){
+    if (roomImage && roomName !== null) {
       axios
-          .post("/rooms/new", {
-            name: roomName,
-            photoURL: roomImage,
-          })
-          .then((data) => {
-            console.log(data.data);
-          }).catch((err)=>{
-        console.log(err);
-      });
+        .post("/rooms/new", {
+          name: roomName,
+          photoURL: roomImage,
+        })
+        .then((data) => {})
+        .catch((err) => {
+          console.log(err);
+        });
     }
   };
   useEffect(() => {
@@ -60,13 +59,14 @@ const Sidebar = ({ rooms }) => {
         : rooms
     );
     setFilteredChats(filteredChat);
-    console.log(filteredChat);
-  }, [search,rooms]);
+  }, [search, rooms]);
   return (
     <div className={"sidebar"}>
       <div className="sidebar__header">
         <Avatar src={user.photoURL} />
-        <h1 style={{fontSize:"16px",marginTop:"10px"}}>{user?.displayName}</h1>
+        <h1 style={{ fontSize: "16px", marginTop: "10px" }}>
+          {user?.displayName}
+        </h1>
         <div className="sidebar__headerRight">
           <IconButton>
             <DonutLargeIcon />

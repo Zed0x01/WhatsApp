@@ -13,7 +13,7 @@ import {
 } from "react-router-dom";
 import { useStateValue } from "./StateProvider";
 import { onAuthStateChanged, getAuth } from "firebase/auth";
-import {channel} from './Pusher'
+import { channel } from "./Pusher";
 import { ACTIONS } from "./reducer";
 
 function App() {
@@ -48,7 +48,6 @@ function App() {
   useEffect(() => {
     channel.bind("inserted", function (newRoom) {
       fetchRooms();
-      console.log(newRoom);
     });
   }, []);
   return (

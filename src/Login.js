@@ -15,7 +15,6 @@ const Login = () => {
         type: ACTIONS.SET_USER,
         user: data.user,
       });
-      console.log(data);
     } catch (err) {
       console.log(err);
     }
