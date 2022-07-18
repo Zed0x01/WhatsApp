@@ -13,6 +13,7 @@ import {
 } from "react-router-dom";
 import { useStateValue } from "./StateProvider";
 import { onAuthStateChanged, getAuth } from "firebase/auth";
+import {channel} from './Pusher'
 import { ACTIONS } from "./reducer";
 
 function App() {
@@ -45,16 +46,11 @@ function App() {
   }, []);
 
   useEffect(() => {
-    const pusher = new Pusher("4545027cb6b998bbe04d", {
-      cluster: "eu",
-    });
-
-    const channel = pusher.subscribe("rooms");
     channel.bind("inserted", function (newRoom) {
       fetchRooms();
       console.log(newRoom);
     });
-  }, [Rooms]);
+  }, []);
   return (
     <div className="app">
       {user ? (

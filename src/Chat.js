@@ -10,6 +10,7 @@ import { useParams } from "react-router-dom";
 import { useEffect, useState, useRef } from "react";
 import axios from "./axios";
 import { useStateValue } from "./StateProvider";
+import {channel} from './Pusher'
 import Pusher from "pusher-js";
 
 const Chat = () => {
@@ -23,23 +24,20 @@ const Chat = () => {
   const [search, setSearch] = useState("");
   const [searchBar, setSearchBar] = useState(false);
 
-  const fetchData = async (type) => {
-    if (type === "chatData") {
-      const chatData = await axios.get(`/rooms/${roomId}`);
-      console.log("Chat Data");
-      setRoom(chatData?.data[0]);
-    } else {
-      const chatMessages = await axios.get(`/rooms/messages/${roomId}`);
-      console.log(chatMessages.data);
-      console.log("Chat Messages");
-      setMessages(chatMessages?.data);
-    }
+  const fetchData = async () => {
+    const chatData = await axios.get(`/rooms/${roomId}`);
+    console.log("Chat Data");
+    setRoom(chatData?.data[0]);
+    const chatMessages = await axios.get(`/rooms/messages/${roomId}`);
+    console.log(chatMessages.data);
+    console.log("Chat Messages");
+    setMessages(chatMessages?.data);
   };
 
   useEffect(() => {
     const filteredData = messages.filter((message) =>
       search !== ""
-        ? message.text.toLowerCase().includes(search.toLowerCase())
+        ? ((message?.text).toLowerCase()).includes(search.toLowerCase())
         : messages
     );
     setFilteredMessages(filteredData);
@@ -47,13 +45,9 @@ const Chat = () => {
 
   useEffect(() => {
     fetchData("chatData");
-    fetchData("chatMessages");
-    const pusher = new Pusher("4545027cb6b998bbe04d", {
-      cluster: "eu",
-    });
-    const channel = pusher.subscribe("rooms");
-    channel.bind("inserted", function (newRoom) {
+      channel.bind("inserted", function (newRoom) {
       fetchData("chatMessages");
+      console.log(newRoom);
       messagesView?.current?.scrollIntoView({ behavior: "smooth" });
     });
   }, [roomId]);

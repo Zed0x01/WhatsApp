@@ -40,28 +40,33 @@ const Sidebar = ({ rooms }) => {
   const addNewChat = () => {
     const roomName = prompt("Enter Room Name");
     const roomImage = prompt("Enter Room Image URL ");
-    axios
-      .post("/rooms/new", {
-        name: roomName,
-        photoURL: roomImage,
-      })
-      .then((data) => {
-        console.log(data.data);
+    if(roomImage && roomName !== null){
+      axios
+          .post("/rooms/new", {
+            name: roomName,
+            photoURL: roomImage,
+          })
+          .then((data) => {
+            console.log(data.data);
+          }).catch((err)=>{
+        console.log(err);
       });
+    }
   };
   useEffect(() => {
-    const filteredChat = rooms.filter((chat) =>
+    const filteredChat = rooms?.filter((chat) =>
       search !== ""
         ? (chat?.name).toLowerCase().includes(search.toLowerCase())
         : rooms
     );
     setFilteredChats(filteredChat);
     console.log(filteredChat);
-  }, [search]);
+  }, [search,rooms]);
   return (
     <div className={"sidebar"}>
       <div className="sidebar__header">
         <Avatar src={user.photoURL} />
+        <h1 style={{fontSize:"16px",marginTop:"10px"}}>{user?.displayName}</h1>
         <div className="sidebar__headerRight">
           <IconButton>
             <DonutLargeIcon />
@@ -69,8 +74,8 @@ const Sidebar = ({ rooms }) => {
           <IconButton>
             <ChatIcon />
           </IconButton>
-          <IconButton>
-            <MoreVertIcon onClick={handleMenu} />
+          <IconButton onClick={handleMenu}>
+            <MoreVertIcon />
           </IconButton>
           <Menu
             id="basic-menu"
