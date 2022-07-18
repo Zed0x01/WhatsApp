@@ -49,9 +49,9 @@ function App() {
     channel.bind("updated", function (newRoom) {
       fetchRooms();
     });
-    return ()=>{
-      channel.unbind('updated');
-    }
+    return () => {
+      channel.unbind("updated");
+    };
   }, []);
   return (
     <div className="app">
