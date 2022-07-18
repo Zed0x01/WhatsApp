@@ -46,9 +46,12 @@ function App() {
   }, []);
 
   useEffect(() => {
-    channel.bind("inserted", function (newRoom) {
+    channel.bind("updated", function (newRoom) {
       fetchRooms();
     });
+    return ()=>{
+      channel.unbind('updated');
+    }
   }, []);
   return (
     <div className="app">
@@ -58,7 +61,7 @@ function App() {
             <Sidebar rooms={Rooms} />
             <Routes>
               <Route path={"/"} element={<Navigate to={"/rooms"} />} />
-              <Route path={"/rooms/:roomId"} element={<Chat />} />
+              <Route path={"/rooms"} element={<Chat />} />
             </Routes>
           </Router>
         </div>
