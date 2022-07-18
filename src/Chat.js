@@ -43,7 +43,7 @@ const Chat = () => {
         channel.unbind("updated");
       };
     }
-  }, []);
+  }, [roomIds]);
 
   useEffect(() => {
     const filteredData = messages.filter((message) =>
@@ -56,7 +56,7 @@ const Chat = () => {
 
   useEffect(() => {
     if (roomIds !== null) {
-      const x = fetchData();
+       fetchData();
     }
   }, [roomIds]);
 
