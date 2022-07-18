@@ -56,7 +56,7 @@ const Chat = () => {
 
   useEffect(() => {
     if (roomIds !== null) {
-       fetchData();
+      fetchData();
     }
   }, [roomIds]);
 

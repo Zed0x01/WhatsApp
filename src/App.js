@@ -46,11 +46,11 @@ function App() {
   }, []);
 
   useEffect(() => {
-    channel.bind("updated", function (newRoom) {
+    channel.bind_global(function (newRoom) {
       fetchRooms();
     });
     return () => {
-      channel.unbind("updated");
+      channel.unbind_global();
     };
   }, []);
   return (
